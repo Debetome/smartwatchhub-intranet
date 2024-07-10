@@ -27,9 +27,8 @@ const Dashboard = () => {
   const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
-    if (!isAuthenticated)
-      router.push("/sign-in");
-  }, [])
+    if (!isAuthenticated) router.push('/sign-in');
+  }, []);
 
   if (isLoading) return <Loading />;
 
