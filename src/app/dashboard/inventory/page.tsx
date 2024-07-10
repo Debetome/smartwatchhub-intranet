@@ -103,7 +103,7 @@ const Inventory: NextPage = () => {
     { field: 'brand', headerName: 'Marca', flex: 0.6 },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: 'Precio',
       flex: 0.6,
       renderCell: (params: { row: Product }) => (
         <Typography color={colors.greenAccent[500]}>
