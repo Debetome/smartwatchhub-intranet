@@ -10,6 +10,10 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+import { useAuth } from '@/app/contexts/authContext';
+import ErrorBox from '@/app/components/ErrorBox';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 const useStyles = {
   formContainer: {
     backgroundColor: '#2C3036',
@@ -19,6 +23,17 @@ const useStyles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: '1.5rem',
+  },
+  userIcon: {
+    fontSize: '6rem',
+    color: '#9BEA19',
+    marginBottom: '0.5rem',
   },
   textField: {
     marginBottom: '20px',
@@ -57,12 +72,16 @@ const useStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: '1rem',
   },
 };
 
 const SigninForm: FC = () => {
   const [formValues, setFormValues] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { login } = useAuth();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -71,25 +90,43 @@ const SigninForm: FC = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
-    // Handle form submission
-    console.log('Form Submitted', formValues);
-    // Simulate an API call
-    setTimeout(() => {
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log('Form Submitted', formValues);
+
+      setTimeout(() => {
+        setLoading(false);
+        login();
+      }, 2000);
+
+    } catch (error) {
       setLoading(false);
-    }, 2000);
+      if (error instanceof Error) {
+        setError(error.message);
+        console.log(error.message);
+      } else {
+        setError('Unexpected error when signing in! ...');
+      }
+    }
   };
 
   return (
     <Container maxWidth="xs">
+      {error && <ErrorBox message={error} />}
       <Box
         component="form"
         sx={useStyles.formContainer}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h4" gutterBottom>
-          Login
-        </Typography>
+        <Box sx={useStyles.headerContainer}>
+          <AccountCircleIcon sx={useStyles.userIcon} />
+          <Typography variant="h4" gutterBottom>
+            Autenticación de Usuario
+          </Typography>
+        </Box>
         <TextField
           name="email"
           label="Email"
@@ -110,7 +147,7 @@ const SigninForm: FC = () => {
         />
         <TextField
           name="password"
-          label="Password"
+          label="Contraseña"
           variant="outlined"
           fullWidth
           type="password"
@@ -132,7 +169,7 @@ const SigninForm: FC = () => {
           sx={useStyles.submitButton}
           disabled={loading}
         >
-          {loading ? <CircularProgress size={24} /> : 'Submit'}
+          {loading ? <CircularProgress size={24} /> : 'Iniciar Sesión'}
         </Button>
       </Box>
     </Container>
