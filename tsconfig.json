@@ -7,19 +7,21 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Changed to "node" for compatibility with Node.js modules
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": "./", // Added baseUrl to resolve module paths correctly
+    "paths": {
+      "@/*": ["src/*"] // Adjusted path mapping to match your project structure
+    },
+    "types": ["node", "react"], // Added types for Node.js and React
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
