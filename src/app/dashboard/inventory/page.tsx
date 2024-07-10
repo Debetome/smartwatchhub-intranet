@@ -9,7 +9,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 
-import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import EditIcon from '@mui/icons-material/Edit';
