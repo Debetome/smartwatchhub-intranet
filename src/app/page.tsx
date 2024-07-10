@@ -1,5 +1,17 @@
-import React from 'react';
+'use client';
 
-export default function Home() {
-  return <h1>hello</h1>;
-}
+import React from 'react';
+import useRequireAuth from '@/app/hooks/useRequireAuth';
+import Redirect from '@/app/components/Redirect';
+
+const Home: React.FC = () => {
+  const isAuthenticated = useRequireAuth();
+
+  return isAuthenticated ? (
+    <Redirect to="/dashboard" />
+  ) : (
+    <Redirect to="/sign-in" />
+  );
+};
+
+export default Home;
