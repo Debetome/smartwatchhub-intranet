@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, useTheme, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { mockTransactions, Transaction } from '@/app/data/mockData';
+import { mockTransactions } from '@/app/data/mockData';
 import { usePageLoading } from '@/app/contexts/pageLoadingContext';
 import { tokens } from '@/app/theme';
 
@@ -43,7 +43,7 @@ const Orders = () => {
       field: 'actions',
       headerName: 'Acciones',
       flex: 1,
-      renderCell: (_: any) => {
+      renderCell: () => {
         return (
           <>
             <Button

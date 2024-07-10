@@ -36,7 +36,6 @@ const Inventory: NextPage = () => {
   const colors = tokens(theme.palette.mode);
 
   const [products, setProducts] = useState<Product[]>([]);
-  
   const { isLoading, setIsLoading } = usePageLoading();
 
   useEffect(() => {

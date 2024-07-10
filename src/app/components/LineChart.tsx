@@ -5,12 +5,12 @@ import { tokens } from '../theme';
 import { mockLineData as data } from '../data/mockData';
 
 interface LineChartProps {
-  isCustomLineColors?: boolean;
+  //isCustomLineColors?: boolean;
   isDashboard?: boolean;
 }
 
 const LineChart: FC<LineChartProps> = ({
-  isCustomLineColors = false,
+  //isCustomLineColors = false,
   isDashboard = false,
 }) => {
   const theme = useTheme();
