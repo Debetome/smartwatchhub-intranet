@@ -29,6 +29,7 @@ const Edit = () => {
       ...foundProduct,
       price: foundProduct.price.toString(),
       rating: foundProduct.rating.toString(),
+      units: foundProduct.units.toString()
     };
 
     setProduct(formProduct);
