@@ -3,7 +3,9 @@
 import React, { FC, useState } from 'react';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import Image from 'next/image'
 import Link from 'next/link';
+
 import 'react-pro-sidebar/dist/css/styles.css';
 import { tokens } from '../theme';
 
@@ -107,10 +109,10 @@ const Sidebar: FC = () => {
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                <img
+                <Image
                   alt="profile-user"
-                  width="100px"
-                  height="100px"
+                  width={100}
+                  height={100}
                   src={`/assets/woman.png`}
                   style={{ cursor: 'pointer', borderRadius: '50%' }}
                 />

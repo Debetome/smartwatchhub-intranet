@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   TextField,
@@ -413,7 +414,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product = {} }) => {
         >
           <Box sx={useStyles.imageContainer}>
             {imagesPreview.map((image, index) => (
-              <img
+              <Image
                 key={index}
                 src={image}
                 alt={`Image ${index + 1}`}

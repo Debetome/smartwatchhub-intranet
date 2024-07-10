@@ -42,7 +42,7 @@ const Users: React.FC<UsersProps> = () => {
       field: 'accessLevel',
       headerName: 'Acciones',
       flex: 1,
-      renderCell: (_: any) => (
+      renderCell: () => (
         <>
           <Button
             sx={{
