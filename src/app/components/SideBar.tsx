@@ -3,7 +3,7 @@
 import React, { FC, useState } from 'react';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import Image from 'next/image'
+import Image from 'next/image';
 import Link from 'next/link';
 
 import 'react-pro-sidebar/dist/css/styles.css';
