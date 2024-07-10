@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/authContext';
 
 const useRequireAuth = () => {
@@ -10,7 +10,7 @@ const useRequireAuth = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login'); // Redirect to login page if not authenticated
+      router.push('/sign-in'); // Redirect to login page if not authenticated
     }
   }, [isAuthenticated, router]);
 

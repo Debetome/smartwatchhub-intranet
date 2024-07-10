@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import { tokens } from '@/app/theme';
 import { mockTransactions } from '@/app/data/mockData';
@@ -11,6 +11,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 
 import { usePageLoading } from '@/app/contexts/pageLoadingContext';
+import { useRouter } from 'next/navigation';
 import useRequireAuth from '@/app/hooks/useRequireAuth';
 import Header from '@/app/components/Header';
 import LineChart from '@/app/components/LineChart';
@@ -19,10 +20,16 @@ import Loading from '@/app/components/Loading';
 
 const Dashboard = () => {
   const { isLoading } = usePageLoading();
-  const {} = useRequireAuth();
+  const isAuthenticated = useRequireAuth();
+  const router = useRouter();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  useEffect(() => {
+    if (!isAuthenticated)
+      router.push("/sign-in");
+  }, [])
 
   if (isLoading) return <Loading />;
 

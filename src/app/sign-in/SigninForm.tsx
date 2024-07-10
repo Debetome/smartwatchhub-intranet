@@ -11,8 +11,10 @@ import {
   CircularProgress,
 } from '@mui/material';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/app/contexts/authContext';
+import useRequireAuth from '@/app/hooks/useRequireAuth';
+
 import ErrorBox from '@/app/components/ErrorBox';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -82,13 +84,15 @@ const SigninForm: FC = () => {
   const [formValues, setFormValues] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const { isAuthenticated, login } = useAuth();
+  
+  const { login } = useAuth();
+  const isAuthenticated = useRequireAuth();
   const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
     if (isAuthenticated) router.push('/dashboard');
-  }, []);
+  }, [pathName]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
