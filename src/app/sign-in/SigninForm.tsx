@@ -1,6 +1,7 @@
 'use client';
 
-import React, { FC, useState, ChangeEvent, FormEvent } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react';
+
 import {
   Box,
   TextField,
@@ -10,6 +11,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/authContext';
 import ErrorBox from '@/app/components/ErrorBox';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -81,7 +83,12 @@ const SigninForm: FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { login } = useAuth();
+  const { isAuthenticated, login } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) router.push('/dashboard');
+  }, []);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -100,8 +107,8 @@ const SigninForm: FC = () => {
       setTimeout(() => {
         setLoading(false);
         login();
+        router.push('/dashboard');
       }, 2000);
-
     } catch (error) {
       setLoading(false);
       if (error instanceof Error) {

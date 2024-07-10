@@ -11,6 +11,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 
 import { usePageLoading } from '@/app/contexts/pageLoadingContext';
+import useRequireAuth from '@/app/hooks/useRequireAuth';
 import Header from '@/app/components/Header';
 import LineChart from '@/app/components/LineChart';
 import StatBox from '@/app/components/StatBox';
@@ -18,6 +19,7 @@ import Loading from '@/app/components/Loading';
 
 const Dashboard = () => {
   const { isLoading } = usePageLoading();
+  const {} = useRequireAuth();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
