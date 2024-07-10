@@ -11,9 +11,11 @@ import {
   Checkbox,
   FormControlLabel,
   useTheme,
+  CircularProgress,
 } from '@mui/material';
 
-import { tokens } from '../../theme';
+import ErrorBox from '@/app/components/ErrorBox';
+import { tokens } from '@/app/theme';
 
 const useStyles = {
   formContainer: {
@@ -46,6 +48,12 @@ const useStyles = {
     backgroundColor: 'none',
     borderRadius: '4px',
     color: '#ffffff',
+  },
+  inputLabel: {
+    color: '#ffffff', // Default color
+    '&.Mui-focused': {
+      color: '#9BEA19', // Focused color
+    },
   },
   imageContainer: {
     display: 'grid',
@@ -113,6 +121,9 @@ interface ProductFormProps {
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ product = {} }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   const [formValues, setFormValues] = useState<Product>({
     name: product.name || '',
     brand: product.brand || '',
@@ -189,290 +200,331 @@ const ProductForm: React.FC<ProductFormProps> = ({ product = {} }) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const products = localStorage.getItem('products');
-    const productsDB = products ? JSON.parse(products) : [];
+    setLoading(true);
 
-    const newProduct = {
-      id: product.id,
-      ...formValues,
-      batteryLife: [formValues.batteryLife, 'días'].join(' '),
-    };
+    try {
+      const products = localStorage.getItem('products');
+      const productsDB = products ? JSON.parse(products) : [];
 
-    if (!newProduct.id) {
-      newProduct.id = productsDB.length > 0 ? productsDB.at(-1).id + 1 : 1;
-      productsDB.push(newProduct);
-    } else {
-      const index = productsDB.findIndex(
-        (item: Product) => item.id === newProduct.id,
-      );
-      if (index !== -1) {
-        productsDB[index] = newProduct;
+      const newProduct = {
+        id: product.id,
+        ...formValues,
+        batteryLife: [formValues.batteryLife, 'días'].join(' '),
+      };
+
+      if (!newProduct.id) {
+        if (productsDB.some((item: Product) => item.name === newProduct.name)) {
+          setLoading(false);
+          setError('No se admiten nombres repetidos');
+          return;
+        }
+
+        newProduct.id = productsDB.length > 0 ? productsDB.at(-1).id + 1 : 1;
+        productsDB.push(newProduct);
+      } else {
+        const index = productsDB.findIndex(
+          (item: Product) => item.id === newProduct.id,
+        );
+        if (index !== -1) {
+          productsDB[index] = newProduct;
+        }
+      }
+
+      const stringified = JSON.stringify(productsDB);
+      localStorage.setItem('products', stringified);
+
+      router.push('/dashboard/inventory');
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unexpected error occurred.');
       }
     }
-
-    const stringified = JSON.stringify(productsDB);
-    localStorage.setItem('products', stringified);
-
-    router.push('/inventario');
   };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        ...useStyles.formContainer,
-        backgroundColor: `${colors.primary[400]}`,
-      }}
-      onSubmit={handleSubmit}
-    >
-      <Typography
-        sx={{ marginBottom: '1.5rem', color: `${colors.grey[100]}` }}
-        variant="h3"
-        gutterBottom
+    <>
+      <Box
+        component="form"
+        sx={{
+          ...useStyles.formContainer,
+          backgroundColor: `${colors.primary[400]}`,
+        }}
+        onSubmit={handleSubmit}
       >
-        Formulario de producto
-      </Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <Box sx={{ width: '50%' }}>
-          <TextField
-            name="name"
-            label="Nombre"
-            variant="outlined"
-            fullWidth
-            value={formValues.name}
-            onChange={handleInputChange}
-            required
-            sx={useStyles.textField}
-            InputProps={{
-              style: useStyles.input,
-            }}
-            InputLabelProps={{
-              shrink: !!formValues.name,
-            }}
-          />
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-            <TextField
-              name="price"
-              label="Precio (S/.)"
-              variant="outlined"
-              fullWidth
-              type="number"
-              value={formValues.price}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.price,
-              }}
-            />
-            <TextField
-              name="units"
-              label="Unidades disponibles"
-              variant="outlined"
-              fullWidth
-              type="number"
-              value={formValues.units}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.units,
-              }}
-            />
-          </Box>
-          <TextField
-            name="brand"
-            label="Marca"
-            variant="outlined"
-            fullWidth
-            value={formValues.brand}
-            onChange={handleInputChange}
-            required
-            sx={useStyles.textField}
-            InputProps={{
-              style: useStyles.input,
-            }}
-            InputLabelProps={{
-              shrink: !!formValues.brand,
-            }}
-          />
-          <TextField
-            name="os"
-            label="Sistema Operativo"
-            variant="outlined"
-            fullWidth
-            value={formValues.os}
-            onChange={handleInputChange}
-            required
-            sx={useStyles.textField}
-            InputProps={{
-              style: useStyles.input,
-            }}
-            InputLabelProps={{
-              shrink: !!formValues.os,
-            }}
-          />
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-            <TextField
-              name="rating"
-              label="Rating"
-              variant="outlined"
-              fullWidth
-              type="number"
-              value={formValues.rating}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.rating,
-              }}
-            />
-            <TextField
-              name="color"
-              label="Color"
-              variant="outlined"
-              fullWidth
-              value={formValues.color}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.color,
-              }}
-            />
-          </Box>
-          <TextField
-            name="screenType"
-            label="Tipo de pantalla"
-            variant="outlined"
-            fullWidth
-            value={formValues.screenType}
-            onChange={handleInputChange}
-            required
-            sx={useStyles.textField}
-            InputProps={{
-              style: useStyles.input,
-            }}
-            InputLabelProps={{
-              shrink: !!formValues.screenType,
-            }}
-          />
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-            <TextField
-              name="discount"
-              label="Descuento"
-              variant="outlined"
-              fullWidth
-              value={formValues.discount}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.discount,
-              }}
-            />
-            <TextField
-              name="batteryLife"
-              label="Duración de la batería (días)"
-              variant="outlined"
-              fullWidth
-              type="number"
-              value={formValues.batteryLife}
-              onChange={handleInputChange}
-              required
-              sx={useStyles.textField}
-              InputProps={{
-                style: useStyles.input,
-              }}
-              InputLabelProps={{
-                shrink: !!formValues.batteryLife,
-              }}
-            />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            width: '50%',
-            paddingLeft: '20px',
-            borderColor: `${colors.grey[100]}`,
-          }}
+        <Typography
+          sx={{ marginBottom: '1.5rem', color: `${colors.grey[100]}` }}
+          variant="h3"
+          gutterBottom
         >
-          <Box sx={useStyles.imageContainer}>
-            {imagesPreview.map((image, index) => (
-              <Image
-                key={index}
-                src={image}
-                alt={`Image ${index + 1}`}
-                style={useStyles.imagePreview}
+          Formulario de producto
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box sx={{ width: '50%' }}>
+            <TextField
+              name="name"
+              label="Nombre"
+              variant="outlined"
+              fullWidth
+              value={formValues.name}
+              onChange={handleInputChange}
+              required
+              sx={useStyles.textField}
+              InputProps={{
+                style: useStyles.input,
+              }}
+              InputLabelProps={{
+                sx: useStyles.inputLabel,
+                shrink: !!formValues.name,
+              }}
+            />
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <TextField
+                name="price"
+                label="Precio (S/.)"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={formValues.price}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.price,
+                }}
               />
-            ))}
+              <TextField
+                name="units"
+                label="Unidades disponibles"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={formValues.units}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.units,
+                }}
+              />
+            </Box>
+            <TextField
+              name="brand"
+              label="Marca"
+              variant="outlined"
+              fullWidth
+              value={formValues.brand}
+              onChange={handleInputChange}
+              required
+              sx={useStyles.textField}
+              InputProps={{
+                style: useStyles.input,
+              }}
+              InputLabelProps={{
+                sx: useStyles.inputLabel,
+                shrink: !!formValues.brand,
+              }}
+            />
+            <TextField
+              name="os"
+              label="Sistema Operativo"
+              variant="outlined"
+              fullWidth
+              value={formValues.os}
+              onChange={handleInputChange}
+              required
+              sx={useStyles.textField}
+              InputProps={{
+                style: useStyles.input,
+              }}
+              InputLabelProps={{
+                sx: useStyles.inputLabel,
+                shrink: !!formValues.os,
+              }}
+            />
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <TextField
+                name="rating"
+                label="Rating"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={formValues.rating}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.rating,
+                }}
+              />
+              <TextField
+                name="color"
+                label="Color"
+                variant="outlined"
+                fullWidth
+                value={formValues.color}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.color,
+                }}
+              />
+            </Box>
+            <TextField
+              name="screenType"
+              label="Tipo de pantalla"
+              variant="outlined"
+              fullWidth
+              value={formValues.screenType}
+              onChange={handleInputChange}
+              required
+              sx={useStyles.textField}
+              InputProps={{
+                style: useStyles.input,
+              }}
+              InputLabelProps={{
+                sx: useStyles.inputLabel,
+                shrink: !!formValues.screenType,
+              }}
+            />
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <TextField
+                name="discount"
+                label="Descuento"
+                variant="outlined"
+                fullWidth
+                value={formValues.discount}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.discount,
+                }}
+              />
+              <TextField
+                name="batteryLife"
+                label="Duración de la batería (días)"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={formValues.batteryLife}
+                onChange={handleInputChange}
+                required
+                sx={useStyles.textField}
+                InputProps={{
+                  style: useStyles.input,
+                }}
+                InputLabelProps={{
+                  sx: useStyles.inputLabel,
+                  shrink: !!formValues.batteryLife,
+                }}
+              />
+            </Box>
           </Box>
-          <Box sx={useStyles.fileInput}>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+          <Box
+            sx={{
+              width: '50%',
+              paddingLeft: '20px',
+              borderColor: `${colors.grey[100]}`,
+            }}
+          >
+            <Box sx={useStyles.imageContainer}>
+              {imagesPreview.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  width={80}
+                  height={80}
+                  alt={`Image ${index + 1}`}
+                  style={useStyles.imagePreview}
+                />
+              ))}
+            </Box>
+            <Box sx={useStyles.fileInput}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </Box>
+            <Box sx={useStyles.checkBoxContainer}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="waterResistant"
+                    checked={formValues.waterResistant}
+                    onChange={handleInputChange}
+                  />
+                }
+                label="Es resistente al agua"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="touchScreen"
+                    checked={formValues.touchScreen}
+                    onChange={handleInputChange}
+                  />
+                }
+                label="Con pantalla táctil"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="gps"
+                    checked={formValues.gps}
+                    onChange={handleInputChange}
+                  />
+                }
+                label="Con GPS"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="bluetooth"
+                    checked={formValues.bluetooth}
+                    onChange={handleInputChange}
+                  />
+                }
+                label="Con Bluetooth"
+              />
+            </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={useStyles.submitButton}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} /> : 'Submit'}
+            </Button>
           </Box>
-          <Box sx={useStyles.checkBoxContainer}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="waterResistant"
-                  checked={formValues.waterResistant}
-                  onChange={handleInputChange}
-                />
-              }
-              label="Es resistente al agua"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="touchScreen"
-                  checked={formValues.touchScreen}
-                  onChange={handleInputChange}
-                />
-              }
-              label="Con pantalla táctil"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="gps"
-                  checked={formValues.gps}
-                  onChange={handleInputChange}
-                />
-              }
-              label="Con GPS"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="bluetooth"
-                  checked={formValues.bluetooth}
-                  onChange={handleInputChange}
-                />
-              }
-              label="Con Bluetooth"
-            />
-          </Box>
-          <Button type="submit" variant="contained" sx={useStyles.submitButton}>
-            Guardar
-          </Button>
         </Box>
       </Box>
-    </Box>
+      {error && <ErrorBox message={error} />}
+    </>
   );
 };
 

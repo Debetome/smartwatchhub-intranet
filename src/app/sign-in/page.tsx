@@ -1,7 +1,21 @@
-import React from 'react';
+// pages/login.tsx
+import React, { FC } from 'react';
+import SigninForm from './SigninForm';
 
-const SignIn = () => {
-  return <h1>Sign in page</h1>;
+const Signin: FC = () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#212429',
+      }}
+    >
+      <SigninForm />
+    </div>
+  );
 };
 
-export default SignIn;
+export default Signin;
