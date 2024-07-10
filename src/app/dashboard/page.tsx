@@ -28,7 +28,10 @@ const Dashboard = () => {
     <Box m="20px" mb="-2px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Bienvenido al dashboard de SmartwatchHub" />
+        <Header 
+          title="DASHBOARD" 
+          subtitle="Bienvenido al dashboard de SmartwatchHub" 
+        />
 
         <Box>
           <Button
