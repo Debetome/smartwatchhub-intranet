@@ -5,7 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import ProductForm, { Product as ProductFormData } from '../../ProductForm';
-import { Product } from '../../../../data/mockData';
+import Loading from '@/app/components/Loading';
+import { Product } from '@/app/data/mockData';
 
 const Edit = () => {
   const [product, setProduct] = useState<ProductFormData | null>(null);
@@ -35,9 +36,7 @@ const Edit = () => {
     setProduct(formProduct);
   }, [productId, router]);
 
-  if (!product) {
-    return <div>Loading...</div>;
-  }
+  if (!product) return <Loading />;
 
   return (
     <Box
