@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { tokens } from '../theme';
 

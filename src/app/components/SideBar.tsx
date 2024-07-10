@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import Link from 'next/link';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { tokens } from '../theme';
 

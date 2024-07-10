@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { PageLoadingProvider } from '../contexts/pageLoadingContext';
 
 import Sidebar from '../components/SideBar';

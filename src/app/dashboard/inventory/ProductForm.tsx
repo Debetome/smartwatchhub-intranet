@@ -189,7 +189,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product = {} }) => {
     event.preventDefault();
 
     const products = localStorage.getItem('products');
-    let productsDB = products ? JSON.parse(products) : [];
+    const productsDB = products ? JSON.parse(products) : [];
 
     const newProduct = {
       id: product.id,
