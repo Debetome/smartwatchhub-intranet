@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useRouter as _useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -30,7 +30,7 @@ const Edit = () => {
       ...foundProduct,
       price: foundProduct.price.toString(),
       rating: foundProduct.rating.toString(),
-      units: foundProduct.units.toString()
+      units: foundProduct.units.toString(),
     };
 
     setProduct(formProduct);

@@ -42,7 +42,7 @@ const Users: React.FC<UsersProps> = () => {
       field: 'accessLevel',
       headerName: 'Acciones',
       flex: 1,
-      renderCell: ({ row }) => (
+      renderCell: (_: any) => (
         <>
           <Button
             sx={{
@@ -74,7 +74,7 @@ const Users: React.FC<UsersProps> = () => {
     },
   ];
 
-  if (isLoading) return <Loading/>
+  if (isLoading) return <Loading />;
 
   return (
     <Box m="20px">

@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React from 'react';
 import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import { tokens } from '@/app/theme';
 import { mockTransactions } from '@/app/data/mockData';
@@ -22,7 +22,7 @@ const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  if (isLoading) return <Loading/>
+  if (isLoading) return <Loading />;
 
   return (
     <Box m="20px" mb="-2px">

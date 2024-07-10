@@ -61,7 +61,7 @@ const useStyles = {
   },
   imagePreview: {
     width: '50%',
-    objectFit: 'cover' as 'cover',
+    objectFit: 'cover' as const,
     borderRadius: '8px',
   },
   fileInput: {

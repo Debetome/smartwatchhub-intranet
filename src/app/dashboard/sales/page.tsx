@@ -49,7 +49,7 @@ const Sales = () => {
     },
   ];
 
-  if (isLoading) return <Loading/>
+  if (isLoading) return <Loading />;
 
   return (
     <Box m="20px">

@@ -1,8 +1,8 @@
 'use client';
 
-import React from "react";
+import React from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from '@/app/theme';
 import { mockDataProducts } from '@/app/data/mockData';
 import { useTheme } from '@mui/material';
@@ -34,10 +34,9 @@ const Inventory: NextPage = () => {
   const router = useRouter();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  
   const { isLoading, setIsLoading } = usePageLoading();
 
   useEffect(() => {
@@ -65,14 +64,14 @@ const Inventory: NextPage = () => {
   const navigateToCreate = () => {
     setIsLoading(true);
     router.push(`/dashboard/inventory/create`);
-  }
+  };
 
   const navigateToEdit = (productId: number) => {
     setIsLoading(true);
     router.push(`/dashboard/inventory/edit/${productId}`);
   };
 
-  const changeUnits = async (id: number, amount: number) => {    
+  const changeUnits = async (id: number, amount: number) => {
     const productsData = localStorage.getItem('products');
     const productsDB = JSON.parse(productsData as string);
 
@@ -211,7 +210,7 @@ const Inventory: NextPage = () => {
     },
   ];
 
-  if (products.length === 0 || isLoading) return <Loading/>
+  if (products.length === 0 || isLoading) return <Loading />;
 
   return (
     <>

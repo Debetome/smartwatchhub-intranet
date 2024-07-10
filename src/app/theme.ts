@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useMemo, ReactNode } from 'react';
+import { createContext, useState, useMemo } from 'react';
 import { createTheme, Theme } from '@mui/material/styles';
 
 // Define the type for the tokens function output

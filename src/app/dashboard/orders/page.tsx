@@ -1,7 +1,7 @@
 'use client';
 
-import React from "react";
-import { Box, Typography, useTheme, Button } from '@mui/material';
+import React from 'react';
+import { Box, useTheme, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { mockTransactions, Transaction } from '@/app/data/mockData';
 import { usePageLoading } from '@/app/contexts/pageLoadingContext';
@@ -43,7 +43,7 @@ const Orders = () => {
       field: 'actions',
       headerName: 'Acciones',
       flex: 1,
-      renderCell: ({ row }: { row: Transaction }) => {
+      renderCell: (_: any) => {
         return (
           <>
             <Button
@@ -66,7 +66,7 @@ const Orders = () => {
     },
   ];
 
-  if (isLoading) return <Loading/>
+  if (isLoading) return <Loading />;
 
   return (
     <Box m="20px">
