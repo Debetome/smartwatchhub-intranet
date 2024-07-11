@@ -185,7 +185,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
           return;
         }
 
-        newUser.id = usersDB.length > 0 ? usersDB.at(-1)?.id! + 1 : 1;
+        newUser.id = usersDB.length > 0 ? (usersDB.at(-1)?.id ?? 0) + 1 : 1;
         usersDB.push(newUser);
       } else {
         const index = usersDB.findIndex((user: User) => user.id === newUser.id);
