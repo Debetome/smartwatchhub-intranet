@@ -19,7 +19,7 @@ interface UsersProps {
 }
 
 const Users: React.FC<UsersProps> = () => {
-  const [users, setUsers] = useState<User>();
+  const [users, setUsers] = useState<User[]>([]); // Change User to User[]
   const { isLoading, setIsLoading } = usePageLoading();
 
   const router = useRouter();
@@ -32,7 +32,7 @@ const Users: React.FC<UsersProps> = () => {
       if (!localStorage.getItem('users')) {
         localStorage.setItem('users', JSON.stringify(mockDataUsers));
       }
-      setUsers(JSON.parse(localStorage.getItem('products') || '[]'));
+      setUsers(JSON.parse(localStorage.getItem('users') || '[]')); // Corrected the key from 'products' to 'users'
     };
     insertData();
   }, []);
@@ -55,7 +55,7 @@ const Users: React.FC<UsersProps> = () => {
     { field: 'phone', headerName: 'Número de teléfono', flex: 1 },
     { field: 'email', headerName: 'Correo de Usuario', flex: 1 },
     {
-      field: 'accessLevel',
+      field: 'access',
       headerName: 'Acciones',
       flex: 1,
       renderCell: ({ row }: { row: User }) => (
@@ -151,7 +151,7 @@ const Users: React.FC<UsersProps> = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataUsers as User[]} columns={columns} />
+        <DataGrid rows={users} columns={columns} />
       </Box>
     </Box>
   );
