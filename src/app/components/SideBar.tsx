@@ -14,8 +14,6 @@ import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import NotesIcon from '@mui/icons-material/Notes';
 
 import { usePageLoading } from '../contexts/pageLoadingContext';
 
@@ -141,13 +139,6 @@ const Sidebar: FC = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Contenido"
-              to="/dashboard/content"
-              icon={<NotesIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -166,13 +157,6 @@ const Sidebar: FC = () => {
               title="Usuarios"
               to="/dashboard/users"
               icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Pedidos"
-              to="/dashboard/orders"
-              icon={<LocalShippingIcon />}
               selected={selected}
               setSelected={setSelected}
             />

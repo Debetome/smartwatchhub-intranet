@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { tokens } from '../../theme';
-import { mockDataTeam, TeamMember } from '../../data/mockData';
+import { mockDataUsers, User } from '../../data/mockData';
 import { usePageLoading } from '@/app/contexts/pageLoadingContext';
+import { useRouter } from 'next/navigation';
+
+import AddIcon from '@mui/icons-material/Add';
 
 import Header from '@/app/components/Header';
 import Button from '@mui/material/Button';
@@ -16,10 +19,23 @@ interface UsersProps {
 }
 
 const Users: React.FC<UsersProps> = () => {
-  const { isLoading } = usePageLoading();
+  const [users, setUsers] = useState<User>();
+  const { isLoading, setIsLoading } = usePageLoading();
 
+  const router = useRouter();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  useEffect(() => {
+    // Simulate fetching products from localStorage or API
+    const insertData = async () => {
+      if (!localStorage.getItem('users')) {
+        localStorage.setItem('users', JSON.stringify(mockDataUsers));
+      }
+      setUsers(JSON.parse(localStorage.getItem('products') || '[]'));
+    };
+    insertData();
+  }, [])
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 120 },
@@ -42,9 +58,10 @@ const Users: React.FC<UsersProps> = () => {
       field: 'accessLevel',
       headerName: 'Acciones',
       flex: 1,
-      renderCell: () => (
+      renderCell: ({ row }: { row: User }) => (
         <>
           <Button
+            onClick={() => navigateToEdit(row.id)}
             sx={{
               backgroundColor: '#6870fa',
               color: '#fff',
@@ -74,11 +91,43 @@ const Users: React.FC<UsersProps> = () => {
     },
   ];
 
+  const navigateToCreate = () => {
+    setIsLoading(true);
+    router.push('/dashboard/users/create');
+  };
+
+  const navigateToEdit = (userId: number) => {
+    setIsLoading(true);
+    router.push(`/dashboard/users/edit/${userId}`);
+  }
+
   if (isLoading) return <Loading />;
 
   return (
     <Box m="20px">
-      <Header title="USUARIOS" subtitle="Administración de usuarios" />
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Header title="USUARIOS" subtitle="Administración de usuarios" />
+        <IconButton
+          onClick={() => navigateToCreate()}
+          sx={{
+            marginLeft: 'auto',
+            backgroundColor: '#9BEA19',
+            '&:hover': {
+              backgroundColor: '#82C715',
+            },
+            width: '56px',
+            height: '56px',
+          }}
+        >
+          <AddIcon
+            sx={{
+              fontSize: '32px',
+              color: '#ffffff',
+              fontWeight: 'bold',
+            }}
+          />
+        </IconButton>
+      </Box>
       <Box
         m="-10px 0 0 0"
         height="70vh"
@@ -102,7 +151,7 @@ const Users: React.FC<UsersProps> = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataTeam as TeamMember[]} columns={columns} />
+        <DataGrid rows={mockDataUsers as User[]} columns={columns} />
       </Box>
     </Box>
   );
