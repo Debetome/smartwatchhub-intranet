@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 'use client';
 
 import { useRouter } from 'next/navigation';

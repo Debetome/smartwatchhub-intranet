@@ -103,7 +103,7 @@ export interface User {
   password?: string;
   age?: number;
   phone?: string;
-  picture?: File;
+  picture?: File | null;
   access?: 'admin' | 'manager' | 'user';
   avatar?: string; // Optional field for avatar image URL
   bio?: string; // Optional field for user biography
@@ -125,7 +125,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
     password: user.password || '',
     age: user.age || 0,
     phone: user.phone || '',
-    picture: user.picture || (null as any), // Adjust as per actual implementation
+    picture: user.picture || null,
     access: user.access || 'user',
   });
 
@@ -141,7 +141,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
       password: user.password || '',
       age: user.age || 0,
       phone: user.phone || '',
-      picture: user.picture || (null as any), // Adjust as per actual implementation
+      picture: user.picture || null,
       access: user.access || 'user',
     });
   }, [user]);
@@ -155,7 +155,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
   };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0] || null;
     if (file) {
       setFormValues({
         ...formValues,
@@ -171,9 +171,9 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
 
     try {
       const users = localStorage.getItem('users');
-      const usersDB = users ? JSON.parse(users) : [];
+      const usersDB: User[] = users ? JSON.parse(users) : [];
 
-      const newUser = {
+      const newUser: User = {
         id: formValues.id,
         ...formValues,
       };
@@ -185,7 +185,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
           return;
         }
 
-        newUser.id = usersDB.length > 0 ? usersDB.at(-1).id + 1 : 1;
+        newUser.id = usersDB.length > 0 ? usersDB.at(-1)?.id! + 1 : 1;
         usersDB.push(newUser);
       } else {
         const index = usersDB.findIndex((user: User) => user.id === newUser.id);
@@ -338,7 +338,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
             <Box sx={useStyles.imageContainer}>
               {formValues.picture && (
                 <Image
-                  src={`/assets/user.png`}
+                  src={URL.createObjectURL(formValues.picture)}
                   alt="User Avatar"
                   width={200}
                   height={200}
