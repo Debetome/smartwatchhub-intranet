@@ -27,7 +27,7 @@ const Edit = () => {
     }
 
     const formProduct: UserFormData = {
-      ...foundUser,         
+      ...foundUser,
     };
 
     setProduct(formProduct);

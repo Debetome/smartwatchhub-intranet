@@ -35,7 +35,7 @@ const Users: React.FC<UsersProps> = () => {
       setUsers(JSON.parse(localStorage.getItem('products') || '[]'));
     };
     insertData();
-  }, [])
+  }, []);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 120 },
@@ -99,7 +99,7 @@ const Users: React.FC<UsersProps> = () => {
   const navigateToEdit = (userId: number) => {
     setIsLoading(true);
     router.push(`/dashboard/users/edit/${userId}`);
-  }
+  };
 
   if (isLoading) return <Loading />;
 

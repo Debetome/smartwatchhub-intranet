@@ -338,7 +338,7 @@ const UserForm: React.FC<UserFormProps> = ({ user = {} }) => {
             <Box sx={useStyles.imageContainer}>
               {formValues.picture && (
                 <Image
-                  src={`/assets/user.png`}               
+                  src={`/assets/user.png`}
                   alt="User Avatar"
                   width={200}
                   height={200}

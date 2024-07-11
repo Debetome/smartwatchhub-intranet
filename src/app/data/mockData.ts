@@ -408,7 +408,6 @@ export const mockDataProducts: Product[] = [
   },
 ];
 
-
 export interface Transaction {
   id: number;
   user: string;
